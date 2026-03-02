@@ -23,17 +23,23 @@ describe("OptimizationTab.vue", () => {
   });
 
   it("shows loading spinner while optimizing", async () => {
-    api.ProductionAPI.optimize.mockResolvedValue({
-      data: {
-        suggestions: [],
-        totalValue: 0,
-        message: "No production possible",
-      },
+    let resolveApi;
+    const delayedPromise = new Promise((resolve) => {
+      resolveApi = resolve;
     });
 
-    await wrapper.find("button.btn-success").trigger("click");
+    api.ProductionAPI.optimize.mockReturnValue(delayedPromise);
 
+    wrapper.find("button.btn-success").trigger("click");
+
+    await wrapper.vm.$nextTick(); 
     expect(wrapper.vm.loading).toBe(true);
+
+    resolveApi({
+      data: { suggestions: [], totalValue: 0, message: "Done" }
+    });
+
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.loading).toBe(false);
   });
