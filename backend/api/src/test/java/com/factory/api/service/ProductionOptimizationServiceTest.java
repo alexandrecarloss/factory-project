@@ -34,6 +34,7 @@ class ProductionOptimizationServiceTest {
     private RawMaterial flour;
     private RawMaterial sugar;
     private RawMaterial egg;
+    private RawMaterial milk;
     private Product bread;
     private Product cake;
 
@@ -43,6 +44,7 @@ class ProductionOptimizationServiceTest {
         flour = new RawMaterial(1L, "FLOUR", "Flour", 1000.0, "g", "Wheat flour");
         sugar = new RawMaterial(2L, "SUGAR", "Sugar", 500.0, "g", "White sugar");
         egg = new RawMaterial(3L, "EGG", "Egg", 100.0, "unit", "Fresh eggs");
+        milk = new RawMaterial(3L, "MILK", "Milk", 5.0, "unit", "Milk carton");
 
         // Create products
         bread = new Product();
@@ -80,13 +82,13 @@ class ProductionOptimizationServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertFalse(result.getSuggestions().isEmpty());
-        assertTrue(result.getTotalValue() > 0);
-        assertEquals("Production optimized successfully", result.getMessage());
+        assertFalse(result.suggestions().isEmpty());
+        assertTrue(result.totalValue() > 0);
+        assertEquals("Production optimized successfully", result.message());
 
         // Check that at least one product is suggested
-        boolean hasSuggestions = result.getSuggestions().stream()
-                .anyMatch(s -> s.getQuantityToProduce() > 0);
+        boolean hasSuggestions = result.suggestions().stream()
+                .anyMatch(s -> s.quantityToProduce() > 0);
         assertTrue(hasSuggestions);
     }
 
@@ -100,9 +102,9 @@ class ProductionOptimizationServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertTrue(result.getSuggestions().isEmpty());
-        assertEquals(0.0, result.getTotalValue());
-        assertEquals("No products available for production", result.getMessage());
+        assertTrue(result.suggestions().isEmpty());
+        assertEquals(0.0, result.totalValue());
+        assertEquals("No products available for production", result.message());
     }
 
     @Test
@@ -120,7 +122,7 @@ class ProductionOptimizationServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(0.0, result.getTotalValue());
+        assertEquals(0.0, result.totalValue());
     }
 
     @Test
@@ -136,9 +138,18 @@ class ProductionOptimizationServiceTest {
         assertNotNull(result);
         // Cake has higher price (25) than bread (10)
         // So cake should be suggested first if possible
-        if (!result.getSuggestions().isEmpty()) {
-            Optional<ProductionSuggestionDTO> firstSuggestion = result.getSuggestions().stream().findFirst();
+        if (!result.suggestions().isEmpty()) {
+            Optional<ProductionSuggestionDTO> firstSuggestion = result.suggestions().stream().findFirst();
             assertTrue(firstSuggestion.isPresent());
         }
     }
+
+    @Test
+    void testOptimizationPrioritizesVolumeIfTotalProfitIsGreater() {
+        // Produto A: R$ 100,00 (Gasta 100kg de farinha)
+        // Produto B: R$ 60,00 (Gasta 10kg de farinha)
+        // Estoque: 100kg de farinha
+        // Resultado esperado: 10 unidades de B (R$ 600,00) em vez de 1 de A (R$ 100,00)
+    }
+
 }

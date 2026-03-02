@@ -19,11 +19,11 @@ public class RawMaterialService {
 
     public RawMaterialDTO save(RawMaterialDTO dto) {
         RawMaterial material = new RawMaterial();
-        material.setCode(dto.getCode());
-        material.setName(dto.getName());
-        material.setStockQuantity(dto.getStockQuantity());
-        material.setUnit(dto.getUnit());
-        material.setDescription(dto.getDescription());
+        material.setCode(dto.code());
+        material.setName(dto.name());
+        material.setStockQuantity(dto.stockQuantity());
+        material.setUnit(dto.unit());
+        material.setDescription(dto.description());
 
         RawMaterial saved = repository.save(material);
         return convertToDTO(saved);
@@ -33,11 +33,11 @@ public class RawMaterialService {
         RawMaterial material = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Raw material not found"));
 
-        material.setCode(dto.getCode());
-        material.setName(dto.getName());
-        material.setStockQuantity(dto.getStockQuantity());
-        material.setUnit(dto.getUnit());
-        material.setDescription(dto.getDescription());
+        material.setCode(dto.code());
+        material.setName(dto.name());
+        material.setStockQuantity(dto.stockQuantity());
+        material.setUnit(dto.unit());
+        material.setDescription(dto.description());
 
         RawMaterial updated = repository.save(material);
         return convertToDTO(updated);

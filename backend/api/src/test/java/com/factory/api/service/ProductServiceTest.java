@@ -65,13 +65,12 @@ class ProductServiceTest {
     void testSaveProduct() {
         when(rawMaterialRepository.findById(1L)).thenReturn(Optional.of(rawMaterial));
         when(productRepository.save(any(Product.class))).thenReturn(product);
-        when(compositionRepository.save(any(ProductComposition.class))).thenReturn(new ProductComposition());
 
         ProductDTO result = service.save(productDTO);
 
         assertNotNull(result);
-        assertEquals("BREAD", result.getCode());
-        assertEquals("Bread", result.getName());
+        assertEquals("BREAD", result.code());
+        assertEquals("Bread", result.name());
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
@@ -83,7 +82,7 @@ class ProductServiceTest {
 
         assertNotNull(results);
         assertEquals(1, results.size());
-        assertEquals("BREAD", results.get(0).getCode());
+        assertEquals("BREAD", results.get(0).code());
         verify(productRepository, times(1)).findAll();
     }
 
@@ -94,7 +93,7 @@ class ProductServiceTest {
         ProductDTO result = service.findById(1L);
 
         assertNotNull(result);
-        assertEquals("BREAD", result.getCode());
+        assertEquals("BREAD", result.code());
         verify(productRepository, times(1)).findById(1L);
     }
 
@@ -111,9 +110,8 @@ class ProductServiceTest {
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(rawMaterialRepository.findById(1L)).thenReturn(Optional.of(rawMaterial));
         when(productRepository.save(any(Product.class))).thenReturn(product);
-        when(compositionRepository.save(any(ProductComposition.class))).thenReturn(new ProductComposition());
 
-        ProductDTO updateDTO = new ProductDTO(1L, "BREAD2", "Bread Type 2", 15.0, "Updated", productDTO.getComposition());
+        ProductDTO updateDTO = new ProductDTO(1L, "BREAD2", "Bread Type 2", 15.0, "Updated", productDTO.composition());
         ProductDTO result = service.update(1L, updateDTO);
 
         assertNotNull(result);

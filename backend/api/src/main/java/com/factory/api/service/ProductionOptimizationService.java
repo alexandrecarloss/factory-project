@@ -70,7 +70,7 @@ public class ProductionOptimizationService {
                             capacity.getProduct().getPrice() * unitsToProducce
                     );
                     suggestions.add(suggestion);
-                    totalValue += suggestion.getTotalValue();
+                    totalValue += suggestion.totalValue();
                 }
             }
         }

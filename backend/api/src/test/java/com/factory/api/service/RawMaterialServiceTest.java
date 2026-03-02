@@ -42,8 +42,8 @@ class RawMaterialServiceTest {
         RawMaterialDTO result = service.save(materialDTO);
 
         assertNotNull(result);
-        assertEquals("FLOUR", result.getCode());
-        assertEquals("Flour", result.getName());
+        assertEquals("FLOUR", result.code());
+        assertEquals("Flour", result.name());
         verify(repository, times(1)).save(any(RawMaterial.class));
     }
 
@@ -55,7 +55,7 @@ class RawMaterialServiceTest {
 
         assertNotNull(results);
         assertEquals(1, results.size());
-        assertEquals("FLOUR", results.get(0).getCode());
+        assertEquals("FLOUR", results.get(0).code());
         verify(repository, times(1)).findAll();
     }
 
@@ -66,7 +66,7 @@ class RawMaterialServiceTest {
         RawMaterialDTO result = service.findById(1L);
 
         assertNotNull(result);
-        assertEquals("FLOUR", result.getCode());
+        assertEquals("FLOUR", result.code());
         verify(repository, times(1)).findById(1L);
     }
 

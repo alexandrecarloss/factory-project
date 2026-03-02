@@ -43,20 +43,20 @@ public class ProductService {
     }
 
     private void updateProductFields(Product product, ProductDTO dto) {
-        product.setCode(dto.getCode());
-        product.setName(dto.getName());
-        product.setPrice(dto.getPrice());
-        product.setDescription(dto.getDescription());
+        product.setCode(dto.code());
+        product.setName(dto.name());
+        product.setPrice(dto.price());
+        product.setDescription(dto.description());
 
-        if (dto.getComposition() != null) {
-            for (ProductCompositionDTO compDTO : dto.getComposition()) {
-                RawMaterial material = rawMaterialRepository.findById(compDTO.getRawMaterialId())
-                        .orElseThrow(() -> new IllegalArgumentException("Material " + compDTO.getRawMaterialId() + " not found"));
+        if (dto.composition() != null) {
+            for (ProductCompositionDTO compDTO : dto.composition()) {
+                RawMaterial material = rawMaterialRepository.findById(compDTO.rawMaterialId())
+                        .orElseThrow(() -> new IllegalArgumentException("Material " + compDTO.rawMaterialName() + " not found"));
 
                 ProductComposition comp = new ProductComposition();
                 comp.setProduct(product);
                 comp.setRawMaterial(material);
-                comp.setQuantityRequired(compDTO.getQuantityRequired());
+                comp.setQuantityRequired(compDTO.quantityRequired());
 
                 product.getComposition().add(comp);
             }
