@@ -1,146 +1,234 @@
 <template>
-  <div class="card">
-    <div class="card-header">
-      <h5>{{ $t("products.title") }}</h5>
-    </div>
-    <div class="card-body">
-      <button class="btn btn-primary mb-3" @click="showForm = !showForm">
-        {{ $t("products.add") }}
+  <div class="space-y-6">
+    <div
+      class="flex justify-between items-center border-b pb-4 border-gray-100"
+    >
+      <h2 class="text-2xl font-bold text-gray-800">
+        {{ $t("products.title") }}
+      </h2>
+      <button
+        class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm"
+        @click="showForm = !showForm"
+      >
+        <span class="text-lg">{{ showForm ? "×" : "+" }}</span>
+        {{ showForm ? $t("products.cancel") : $t("products.add") }}
       </button>
+    </div>
 
-      <!-- Form -->
-      <div v-if="showForm" class="card mb-3">
-        <div class="card-body">
-          <form @submit.prevent="saveProduct">
-            <div class="mb-3">
-              <label class="form-label">{{ $t("products.code") }}</label>
-              <input v-model="form.code" class="form-control" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ $t("products.name") }}</label>
-              <input v-model="form.name" class="form-control" required />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ $t("products.price") }}</label>
-              <input
-                v-model.number="form.price"
-                class="form-control"
-                type="number"
-                step="0.01"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">{{ $t("products.description") }}</label>
-              <textarea
-                v-model="form.description"
-                class="form-control"
-              ></textarea>
-            </div>
-
-            <!-- Composition -->
-            <div class="mb-3">
-              <h6>{{ $t("products.composition") }}</h6>
-              <div
-                v-for="(comp, index) in form.composition"
-                :key="index"
-                class="mb-2"
-              >
-                <div class="row">
-                  <div class="col-md-6">
-                    <select
-                      v-model.number="comp.rawMaterialId"
-                      class="form-select"
-                    >
-                      <option value="">Select Raw Material</option>
-                      <option
-                        v-for="material in rawMaterials"
-                        :key="material.id"
-                        :value="material.id"
-                      >
-                        {{ material.name }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <input
-                      v-model.number="comp.quantityRequired"
-                      class="form-control"
-                      type="number"
-                      placeholder="Quantity"
-                    />
-                  </div>
-                  <div class="col-md-2">
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-danger"
-                      @click="removeComposition(index)"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                @click="addComposition"
-              >
-                {{ $t("products.addComposition") }}
-              </button>
-            </div>
-
-            <button type="submit" class="btn btn-success">
-              {{ $t("products.save") }}
-            </button>
-            <button type="button" class="btn btn-secondary" @click="resetForm">
-              {{ $t("products.cancel") }}
-            </button>
-          </form>
+    <div
+      v-if="showForm"
+      class="bg-gray-50 border border-indigo-100 p-6 rounded-2xl shadow-inner"
+    >
+      <form
+        class="grid grid-cols-1 md:grid-cols-2 gap-6"
+        @submit.prevent="saveProduct"
+      >
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">{{
+              $t("products.code")
+            }}</label>
+            <input
+              v-model="form.code"
+              class="w-full px-4 py-2 rounded-lg border-gray-300 border focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+              required
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">{{
+              $t("products.name")
+            }}</label>
+            <input
+              v-model="form.name"
+              class="w-full px-4 py-2 rounded-lg border-gray-300 border focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+              required
+            >
+          </div>
         </div>
-      </div>
 
-      <!-- List -->
-      <div v-if="products.length > 0" class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>{{ $t("products.code") }}</th>
-              <th>{{ $t("products.name") }}</th>
-              <th>{{ $t("products.price") }}</th>
-              <th>{{ $t("products.composition") }}</th>
-              <th>{{ $t("products.actions") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="product in products" :key="product.id">
-              <td>{{ product.code }}</td>
-              <td>{{ product.name }}</td>
-              <td>${{ product.price.toFixed(2) }}</td>
-              <td>
-                <small v-for="comp in product.composition" :key="comp.id">
-                  {{ comp.rawMaterialName }} ({{ comp.quantityRequired }})<br />
-                </small>
-              </td>
-              <td>
-                <button
-                  class="btn btn-sm btn-info me-2"
-                  @click="editProduct(product)"
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">{{
+              $t("products.price")
+            }}</label>
+            <input
+              v-model.number="form.price"
+              type="number"
+              step="0.01"
+              class="w-full px-4 py-2 rounded-lg border-gray-300 border focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+              required
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">{{
+              $t("products.description")
+            }}</label>
+            <textarea
+              v-model="form.description"
+              class="w-full px-4 py-2 rounded-lg border-gray-300 border focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+              rows="1"
+            />
+          </div>
+        </div>
+
+        <div
+          class="col-span-full bg-white p-4 rounded-xl border border-gray-200"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-gray-700">
+              {{ $t("products.composition") }}
+            </h4>
+            <button
+              type="button"
+              class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-md text-sm font-bold hover:bg-indigo-100 transition-colors"
+              @click="addComposition"
+            >
+              + {{ $t("products.addComposition") }}
+            </button>
+          </div>
+
+          <div
+            v-for="(comp, index) in form.composition"
+            :key="index"
+            class="flex gap-3 mb-3 items-center bg-gray-50 p-2 rounded-lg"
+          >
+            <div class="flex-1">
+              <label class="block text-[10px] uppercase font-bold text-gray-400 ml-1">
+                {{ $t("products.rawMaterial") }}
+              </label>
+              <select
+                v-model.number="comp.rawMaterialId"
+                class="w-full bg-transparent px-2 py-1 focus:outline-none text-sm"
+                required
+              >
+                <option 
+                  :value="null" 
+                  disabled
                 >
-                  {{ $t("products.edit") }}
-                </button>
-                <button
-                  class="btn btn-sm btn-danger"
-                  @click="deleteProduct(product.id)"
+                  {{ $t("products.rawMaterial") }}...
+                </option>
+                <option 
+                  v-for="m in rawMaterials" 
+                  :key="m.id" 
+                  :value="m.id"
                 >
-                  {{ $t("products.delete") }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-else class="alert alert-info">No products found</div>
+                  {{ m.name }}
+                </option>
+              </select>
+            </div>
+            <div class="w-32 border-l border-gray-200 pl-3">
+              <label class="block text-[10px] uppercase font-bold text-gray-400 ml-1">
+                {{ $t("products.quantity") }}
+              </label>
+              <input
+                v-model.number="comp.quantityRequired"
+                type="number"
+                step="0.1"
+                class="w-full bg-transparent px-2 py-1 focus:outline-none text-sm"
+                required
+              >
+            </div>
+            <button
+              type="button"
+              class="text-red-400 hover:text-red-600 p-2 transition-colors"
+              @click="removeComposition(index)"
+            >
+              🗑
+            </button>
+          </div>
+        </div>
+
+        <div class="col-span-full flex gap-3 pt-4 border-t border-gray-200">
+          <button
+            type="submit"
+            class="bg-green-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-green-700 transition-all shadow-md"
+          >
+            {{ $t("products.save") }}
+          </button>
+          <button
+            type="button"
+            class="text-gray-500 px-4 py-2 hover:bg-gray-100 rounded-lg transition-all"
+            @click="resetForm"
+          >
+            {{ $t("products.cancel") }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div
+      class="overflow-hidden border border-gray-200 rounded-xl bg-white shadow-sm"
+    >
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider italic"
+            >
+              Item
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+            >
+              {{ $t("products.price") }}
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+            >
+              {{ $t("products.composition") }}
+            </th>
+            <th
+              class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider"
+            >
+              {{ $t("products.actions") }}
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr
+            v-for="product in products"
+            :key="product.id"
+            class="hover:bg-gray-50/50 transition-colors"
+          >
+            <td class="px-6 py-4">
+              <div class="font-bold text-gray-900">
+                {{ product.name }}
+              </div>
+              <div class="text-xs text-gray-400 font-mono">
+                {{ product.code }}
+              </div>
+            </td>
+            <td class="px-6 py-4 text-sm font-mono text-gray-700 font-semibold">
+              ${{ product.price.toFixed(2) }}
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex flex-wrap gap-1">
+                <span
+                  v-for="c in product.composition"
+                  :key="c.id"
+                  class="bg-indigo-50 text-indigo-700 text-[10px] px-2 py-0.5 rounded-full border border-indigo-100 uppercase font-bold"
+                >
+                  {{ c.rawMaterialName }}: {{ c.quantityRequired }}
+                </span>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-right space-x-2">
+              <button
+                class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors"
+                @click="editProduct(product)"
+              >
+                ✏️
+              </button>
+              <button
+                class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors"
+                @click="deleteProduct(product.id)"
+              >
+                🗑
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -155,13 +243,7 @@ export default {
       products: [],
       rawMaterials: [],
       showForm: false,
-      form: {
-        code: "",
-        name: "",
-        price: 0,
-        description: "",
-        composition: [],
-      },
+      form: { code: "", name: "", price: 0, description: "", composition: [] },
       editingId: null,
     };
   },
@@ -175,8 +257,7 @@ export default {
         const response = await ProductAPI.getAll();
         this.products = response.data;
       } catch (error) {
-        console.error("Error loading products:", error);
-        alert("Error loading products");
+        console.error(error);
       }
     },
     async loadRawMaterials() {
@@ -184,22 +265,18 @@ export default {
         const response = await RawMaterialAPI.getAll();
         this.rawMaterials = response.data;
       } catch (error) {
-        console.error("Error loading materials:", error);
+        console.error(error);
       }
     },
     async saveProduct() {
       try {
-        if (this.editingId) {
-          await ProductAPI.update(this.editingId, this.form);
-        } else {
-          await ProductAPI.create(this.form);
-        }
+        if (this.editingId) await ProductAPI.update(this.editingId, this.form);
+        else await ProductAPI.create(this.form);
         this.resetForm();
         this.loadProducts();
         alert(this.$t("messages.success"));
       } catch (error) {
-        console.error("Error saving product:", error);
-        alert("Error saving product");
+        alert(this.$t("messages.error"));
       }
     },
     editProduct(product) {
@@ -215,18 +292,13 @@ export default {
         try {
           await ProductAPI.delete(id);
           this.loadProducts();
-          alert(this.$t("messages.success"));
         } catch (error) {
-          console.error("Error deleting product:", error);
-          alert("Error deleting product");
+          alert(this.$t("messages.error"));
         }
       }
     },
     addComposition() {
-      this.form.composition.push({
-        rawMaterialId: null,
-        quantityRequired: 0,
-      });
+      this.form.composition.push({ rawMaterialId: null, quantityRequired: 0 });
     },
     removeComposition(index) {
       this.form.composition.splice(index, 1);

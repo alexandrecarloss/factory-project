@@ -1,62 +1,106 @@
 <template>
-  <div class="card">
-    <div class="card-header">
-      <h5>{{ $t("optimization.title") }}</h5>
-    </div>
-    <div class="card-body">
-      <button class="btn btn-lg btn-success mb-4" @click="optimize">
-        {{ $t("optimization.optimize") }}
+  <div class="space-y-6">
+    <div
+      class="flex justify-between items-center border-b pb-4 border-gray-100"
+    >
+      <h2 class="text-2xl font-bold text-gray-800">
+        {{ $t("optimization.title") }}
+      </h2>
+      <button
+        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-all"
+        :disabled="loading"
+        @click="optimize"
+      >
+        <span
+          v-if="loading"
+          class="mr-2 animate-spin text-lg italic inline-block"
+        >
+          ◌
+        </span>
+        {{ loading ? $t("common.loading") : $t("optimization.optimize") }}
       </button>
+    </div>
 
-      <!-- Results -->
-      <div v-if="lastResult" class="mb-4">
-        <div class="alert alert-info">
+    <div 
+      v-if="lastResult" 
+      class="animate-fade-in space-y-6"
+    >
+      <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+        <p class="text-sm text-blue-700 font-medium">
           {{ lastResult.message }}
-        </div>
-
-        <div v-if="lastResult.suggestions.length > 0">
-          <h6>{{ $t("optimization.suggestions") }}</h6>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>{{ $t("optimization.productCode") }}</th>
-                  <th>{{ $t("optimization.productName") }}</th>
-                  <th>{{ $t("optimization.unitPrice") }}</th>
-                  <th>{{ $t("optimization.quantityToProce") }}</th>
-                  <th>{{ $t("optimization.totalValue") }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="suggestion in lastResult.suggestions"
-                  :key="suggestion.productId"
-                >
-                  <td>{{ suggestion.productCode }}</td>
-                  <td>{{ suggestion.productName }}</td>
-                  <td>${{ suggestion.price.toFixed(2) }}</td>
-                  <td>{{ suggestion.quantityToProduce }}</td>
-                  <td class="fw-bold">
-                    ${{ suggestion.totalValue.toFixed(2) }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="alert alert-success mt-3">
-            <strong>{{ $t("optimization.totalProduction") }}:</strong> ${{
-              lastResult.totalValue.toFixed(2)
-            }}
-          </div>
-        </div>
-        <div v-else class="alert alert-warning">
-          {{ $t("optimization.noResults") }}
-        </div>
+        </p>
       </div>
 
-      <div v-if="loading" class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
+      <div 
+        v-if="lastResult.suggestions.length > 0" 
+        class="space-y-4"
+      >
+        <h3 class="text-lg font-semibold text-gray-700 px-1">
+          {{ $t("optimization.suggestions") }}
+        </h3>
+
+        <div
+          class="overflow-hidden border border-gray-200 rounded-xl shadow-sm"
+        >
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                >
+                  {{ $t("optimization.productName") }}
+                </th>
+                <th
+                  class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider"
+                >
+                  {{ $t("optimization.quantityToProce") }}
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider"
+                >
+                  {{ $t("optimization.totalValue") }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr
+                v-for="suggestion in lastResult.suggestions"
+                :key="suggestion.productId"
+                class="hover:bg-gray-50 transition-colors"
+              >
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ suggestion.productName }}
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    {{ suggestion.productCode }}
+                  </div>
+                </td>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono"
+                >
+                  {{ suggestion.quantityToProduce }}
+                </td>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-indigo-600"
+                >
+                  ${{ suggestion.totalValue.toFixed(2) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          class="bg-indigo-600 rounded-xl p-6 text-white shadow-lg shadow-indigo-200 flex justify-between items-center"
+        >
+          <span class="text-indigo-100 font-medium">{{
+            $t("optimization.totalProduction")
+          }}</span>
+          <span class="text-3xl font-black">
+            ${{ lastResult.totalValue.toFixed(2) }}
+          </span>
+        </div>
       </div>
     </div>
   </div>

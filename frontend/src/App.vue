@@ -1,68 +1,52 @@
 <template>
-  <div class="container-fluid">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">🏭 {{ $t("app.title") }}</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <button
-                class="btn btn-sm btn-outline-light"
-                @click="toggleLanguage"
-              >
-                {{ $i18n.locale === "en" ? "🇧🇷 PT" : "🇺🇸 EN" }}
-              </button>
-            </li>
-          </ul>
+  <div class="min-h-screen bg-gray-50 font-sans antialiased text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🏭</span>
+            <h1 class="text-xl font-bold tracking-tight text-indigo-600 uppercase">
+              {{ $t("app.title") }}
+            </h1>
+          </div>
+          
+          <button
+            @click="toggleLanguage"
+            class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-all"
+          >
+            {{ $i18n.locale === "en" ? "🇧🇷 PT" : "🇺🇸 EN" }}
+          </button>
         </div>
       </div>
-    </nav>
+    </header>
 
-    <div class="container-fluid mt-4">
-      <ul class="nav nav-tabs mb-4">
-        <li class="nav-item">
-          <button
-            class="nav-link"
-            :class="{ active: activeTab === 'raw' }"
-            @click="activeTab = 'raw'"
-          >
-            {{ $t("menu.rawMaterials") }}
-          </button>
-        </li>
-        <li class="nav-item">
-          <button
-            class="nav-link"
-            :class="{ active: activeTab === 'prod' }"
-            @click="activeTab = 'prod'"
-          >
-            {{ $t("menu.products") }}
-          </button>
-        </li>
-        <li class="nav-item">
-          <button
-            class="nav-link"
-            :class="{ active: activeTab === 'optimization' }"
-            @click="activeTab = 'optimization'"
-          >
-            {{ $t("menu.optimization") }}
-          </button>
-        </li>
-      </ul>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <nav class="flex space-x-2 bg-gray-200/50 p-1 rounded-xl mb-8 w-fit">
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          @click="activeTab = tab.id"
+          :class="[
+            activeTab === tab.id 
+              ? 'bg-white text-indigo-600 shadow-sm' 
+              : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100',
+            'px-4 py-2 text-sm font-semibold rounded-lg transition-all'
+          ]"
+        >
+          {{ $t(tab.label) }}
+        </button>
+      </nav>
 
-      <div class="tab-content">
-        <div v-if="activeTab === 'raw'"><RawMaterialsTab /></div>
-        <div v-if="activeTab === 'prod'"><ProductsTab /></div>
-        <div v-if="activeTab === 'optimization'"><OptimizationTab /></div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 min-h-[500px]">
+        <transition mode="out-in" enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 translate-y-2" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-2">
+          <div :key="activeTab">
+            <RawMaterialsTab v-if="activeTab === 'raw'" />
+            <ProductsTab v-if="activeTab === 'prod'" />
+            <OptimizationTab v-if="activeTab === 'optimization'" />
+          </div>
+        </transition>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -73,14 +57,15 @@ import OptimizationTab from "./components/OptimizationTab.vue";
 
 export default {
   name: "App",
-  components: {
-    RawMaterialsTab,
-    ProductsTab,
-    OptimizationTab,
-  },
+  components: { RawMaterialsTab, ProductsTab, OptimizationTab },
   data() {
     return {
       activeTab: "raw",
+      tabs: [
+        { id: 'raw', label: 'menu.rawMaterials' },
+        { id: 'prod', label: 'menu.products' },
+        { id: 'optimization', label: 'menu.optimization' }
+      ]
     };
   },
   methods: {
@@ -90,9 +75,3 @@ export default {
   },
 };
 </script>
-
-<style>
-body {
-  background-color: #f5f5f5;
-}
-</style>

@@ -1,8 +1,7 @@
 import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 import App from "./App.vue";
-import "bootstrap/dist/css/bootstrap.min.css";
-
+import "./style.css";
 import en from "./locales/en.json";
 import pt from "./locales/pt.json";
 
