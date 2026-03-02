@@ -1,0 +1,63 @@
+{
+  "app": {
+    "title": "Gerenciamento de Produção da Fábrica"
+  },
+  "menu": {
+    "rawMaterials": "Matérias-Primas",
+    "products": "Produtos",
+    "optimization": "Otimização de Produção"
+  },
+  "rawMaterials": {
+    "title": "Gerenciamento de Matérias-Primas",
+    "code": "Código",
+    "name": "Nome",
+    "stockQuantity": "Quantidade em Estoque",
+    "unit": "Unidade",
+    "description": "Descrição",
+    "actions": "Ações",
+    "add": "Adicionar Matéria-Prima",
+    "edit": "Editar",
+    "delete": "Deletar",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "new": "Nova Matéria-Prima",
+    "confirm": "Tem certeza?"
+  },
+  "products": {
+    "title": "Gerenciamento de Produtos",
+    "code": "Código",
+    "name": "Nome",
+    "price": "Preço",
+    "description": "Descrição",
+    "composition": "Composição",
+    "actions": "Ações",
+    "add": "Adicionar Produto",
+    "edit": "Editar",
+    "delete": "Deletar",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "new": "Novo Produto",
+    "confirm": "Tem certeza?",
+    "addComposition": "Adicionar Material",
+    "rawMaterial": "Matéria-Prima",
+    "quantity": "Quantidade"
+  },
+  "optimization": {
+    "title": "Otimização de Produção",
+    "optimize": "Otimizar Produção",
+    "currentStock": "Estoque Atual",
+    "suggestions": "Sugestões de Produção",
+    "productCode": "Código do Produto",
+    "productName": "Nome do Produto",
+    "unitPrice": "Preço Unitário",
+    "quantityToProce": "Quantidade a Produzir",
+    "totalValue": "Valor Total",
+    "totalProduction": "Valor Total de Produção",
+    "noResults": "Nenhuma produção possível com o estoque atual"
+  },
+  "messages": {
+    "success": "Operação concluída com sucesso",
+    "error": "Erro ao executar operação",
+    "confirmDelete": "Tem certeza que deseja deletar este item?"
+  }
+}

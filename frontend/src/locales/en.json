@@ -1,0 +1,63 @@
+{
+  "app": {
+    "title": "Factory Production Management"
+  },
+  "menu": {
+    "rawMaterials": "Raw Materials",
+    "products": "Products",
+    "optimization": "Production Optimization"
+  },
+  "rawMaterials": {
+    "title": "Raw Materials Management",
+    "code": "Code",
+    "name": "Name",
+    "stockQuantity": "Stock Quantity",
+    "unit": "Unit",
+    "description": "Description",
+    "actions": "Actions",
+    "add": "Add Raw Material",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "new": "New Raw Material",
+    "confirm": "Are you sure?"
+  },
+  "products": {
+    "title": "Products Management",
+    "code": "Code",
+    "name": "Name",
+    "price": "Price",
+    "description": "Description",
+    "composition": "Composition",
+    "actions": "Actions",
+    "add": "Add Product",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "new": "New Product",
+    "confirm": "Are you sure?",
+    "addComposition": "Add Material",
+    "rawMaterial": "Raw Material",
+    "quantity": "Quantity"
+  },
+  "optimization": {
+    "title": "Production Optimization",
+    "optimize": "Optimize Production",
+    "currentStock": "Current Stock",
+    "suggestions": "Production Suggestions",
+    "productCode": "Product Code",
+    "productName": "Product Name",
+    "unitPrice": "Unit Price",
+    "quantityToProce": "Quantity to Produce",
+    "totalValue": "Total Value",
+    "totalProduction": "Total Production Value",
+    "noResults": "No production possible with current stock"
+  },
+  "messages": {
+    "success": "Operation completed successfully",
+    "error": "Error occurred",
+    "confirmDelete": "Are you sure you want to delete this item?"
+  }
+}
