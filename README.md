@@ -2,6 +2,25 @@
 
 A comprehensive system for managing industrial production, optimizing the production of items based on available raw materials to maximize profit.
 
+## 🚀 Tech Stack
+<div align="center">
+ 
+ ![Java 21](https://img.shields.io/badge/Java-21-007396?style=for-the-badge&logo=openjdk&logoColor=white)
+ ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+ ![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-ORM-6DB33F?style=for-the-badge)
+ ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-DB-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+ ![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
+ ![JUnit 5](https://img.shields.io/badge/JUnit_5-Testing-25A162?style=for-the-badge&logo=junit5&logoColor=white)
+ ![Mockito](https://img.shields.io/badge/Mockito-Mocking-5C2D91?style=for-the-badge)
+ 
+ ![Vue.js 3](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+ ![Vite](https://img.shields.io/badge/Vite-Build-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+ ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+ ![Axios](https://img.shields.io/badge/Axios-HTTP-5A29E4?style=for-the-badge)
+ ![Vue I18n](https://img.shields.io/badge/Vue_I18n-Internationalization-4FC08D?style=for-the-badge)
+ ![Vitest](https://img.shields.io/badge/Vitest-Testing-6E9F18?style=for-the-badge)
+</div>
+
 ## 🎯 Features
 
 - **Raw Materials Management**: Create, read, update, and delete raw materials with stock tracking
@@ -10,7 +29,25 @@ A comprehensive system for managing industrial production, optimizing the produc
 - **Internationalization**: Support for English and Portuguese
 - **Unit Tests**: Comprehensive test coverage for backend and frontend
 - **RESTful API**: Clean and well-documented API endpoints
-- **Responsive UI**: Bootstrap-based frontend with intuitive interface
+- **API Documentation**: Interactive API documentation with Swagger UI
+- **Responsive UI**: Tailwind CSS-based modern and utility-first interface
+
+## Demo
+
+### Raw material screen
+<div align="center">
+  <img src="assets/raw-material.png" alt="Raw material Screen" style="align: center; width: 800px; display: block; margin: 0 auto;">
+</div>
+
+### Products screen
+<div align="center">
+  <img src="assets/products.png" alt="Products Screen" style="align: center; width: 800px; display: block; margin: 0 auto;">
+</div>
+
+### Optimization screen
+<div align="center">
+  <img src="assets/optimization.png" alt="Optimization Screen" style="align: center; width: 800px; display: block; margin: 0 auto;">
+</div>
 
 ## 🛠️ Technologies
 
@@ -27,7 +64,7 @@ A comprehensive system for managing industrial production, optimizing the produc
 
 - **Vue.js 3**
 - **Vite**
-- **Bootstrap 5**
+- **Tailwind CSS**
 - **Axios**
 - **Vue I18n** (Internationalization)
 - **Vitest** (Testing)
@@ -70,6 +107,19 @@ mvn spring-boot:run
 ```
 
 The API will be available at `http://localhost:8080`
+
+## 📖 API Documentation (Swagger)
+
+The API documentation is available via Swagger UI after starting the backend:
+
+🔗 http://localhost:8080/swagger-ui/index.html
+
+Swagger provides:
+
+- Interactive endpoint testing
+- Request/response schema visualization
+- Automatic documentation of REST controllers
+- Try-it-out feature for real-time API execution
 
 ### 4. Setup Frontend
 
