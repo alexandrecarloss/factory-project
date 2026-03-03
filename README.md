@@ -12,6 +12,7 @@ A comprehensive system for managing industrial production, optimizing the produc
  ![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
  ![JUnit 5](https://img.shields.io/badge/JUnit_5-Testing-25A162?style=for-the-badge&logo=junit5&logoColor=white)
  ![Mockito](https://img.shields.io/badge/Mockito-Mocking-5C2D91?style=for-the-badge)
+ ![Swagger](https://img.shields.io/badge/Swagger-API_Docs-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
  
  ![Vue.js 3](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
  ![Vite](https://img.shields.io/badge/Vite-Build-646CFF?style=for-the-badge&logo=vite&logoColor=white)
@@ -77,28 +78,63 @@ A comprehensive system for managing industrial production, optimizing the produc
 - Docker and Docker Compose
 - PostgreSQL (or use Docker)
 
-## 🚀 Getting Started
+### 🐳 Dockerized Architecture
+The project runs entirely with Docker using a multi-container setup:
+- PostgreSQL 15
+- Spring Boot API
+- Vue 3 + Nginx Frontend
+All services are orchestrated with docker-compose.
 
-### 1. Clone the Repository
-
+## 🚀 Getting Started (Recommended – Docker)
+1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/alexandrecarloss/factory-project)
+```
+```bash
 cd factory-project
 ```
 
-### 2. Start the Database
+### 2. Start the full application
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
-This will start a PostgreSQL database on `localhost:5432`
+This will start:
+| Service    | URL                                                  |
+|------------|------------------------------------------------------|
+| Frontend   | http://localhost:3000                                |
+| Backend API| http://localhost:8080                                |
+| Swagger UI | http://localhost:8080/swagger-ui/index.html          |
+| PostgreSQL | localhost:5432 (host machine)                        |
+
+- Database credentials:
 
 - **Database**: factory_db
 - **Username**: user
 - **Password**: password
 
-### 3. Setup Backend
+- To stop:
+```bash
+docker-compose down
+```
+
+## 🧩 Running Without Docker (Manual Setup)
+
+1. Clone the repository
+```bash
+git clone https://github.com/alexandrecarloss/factory-project.git
+```
+```bash
+cd factory-project
+```
+
+2. Start the Database
+```bash
+docker-compose up -d db 
+```
+
+3. Setup Backend
 
 ```bash
 cd backend/api
@@ -107,6 +143,21 @@ mvn spring-boot:run
 ```
 
 The API will be available at `http://localhost:8080`
+You can also access the OpenAPI specification in JSON format:
+
+`http://localhost:8080/v3/api-docs`
+
+### 4. Setup Frontend
+
+Open a new terminal window/tab:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend: `http://localhost:3000`
 
 ## 📖 API Documentation (Swagger)
 
@@ -120,18 +171,6 @@ Swagger provides:
 - Request/response schema visualization
 - Automatic documentation of REST controllers
 - Try-it-out feature for real-time API execution
-
-### 4. Setup Frontend
-
-Open a new terminal window/tab:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The frontend will be available at `http://localhost:3000`
  
 ## 📚 API Endpoints
 
@@ -200,7 +239,7 @@ The frontend will be available at `http://localhost:3000`
       "productCode": "BREAD",
       "productName": "Bread",
       "price": 10.0,
-      "quantityToProce": 5,
+      "quantityToProduce": 5,
       "totalValue": 50.0
     }
   ],
@@ -324,29 +363,21 @@ CORS is enabled for all origins (`*`) in the controllers. You can restrict this 
 - Query optimization
 - Frontend bundle optimization with Vite
 
-## 🚢 Deployment
+## 🚢 Docker Configuration
 
-### Backend (Docker)
+This project uses multi-stage Docker builds for optimized image size and performance.
 
-```dockerfile
-FROM openjdk:21-jdk
-COPY backend/api/target/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
-```
+### Backend
 
-### Frontend (Docker)
+- Builder stage: Maven + JDK 21
+- Runtime stage: Eclipse Temurin JRE 21 (Jammy)
+- Exposed port: 8080
 
-```dockerfile
-FROM node:18 as build
-WORKDIR /app
-COPY frontend/package*.json ./
-RUN npm install
-COPY frontend . .
-RUN npm run build
+### Frontend
 
-FROM nginx:latest
-COPY --from=build /app/dist /usr/share/nginx/html
-```
+- Builder stage: Node 18 Alpine
+- Runtime stage: Nginx Alpine
+- Exposed port: 80 (mapped to 3000)
 
 ## 📄 License
 
