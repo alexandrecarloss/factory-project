@@ -25,7 +25,7 @@ describe("ProductsTab.vue", () => {
   });
 
   it("renders component with add button", () => {
-    expect(wrapper.find("button.bg-indigo-600").exists()).toBe(true);
+    expect(wrapper.find("button.btn-add-product").exists()).toBe(true);
   });
 
   it("loads products on mount", async () => {

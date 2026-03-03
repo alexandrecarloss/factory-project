@@ -17,7 +17,7 @@ describe("OptimizationTab.vue", () => {
   });
 
   it("renders component with optimize button", () => {
-    expect(wrapper.find("button.bg-green-600").exists()).toBe(true);
+    expect(wrapper.find("button.btn-optimize").exists()).toBe(true);
   });
 
   it("shows loading spinner while optimizing", async () => {
@@ -26,7 +26,7 @@ describe("OptimizationTab.vue", () => {
 
     api.ProductionAPI.optimize.mockReturnValue(delayedPromise);
 
-    await wrapper.find("button.bg-green-600").trigger("click");
+    await wrapper.find("button.btn-optimize").trigger("click");
 
     expect(wrapper.vm.loading).toBe(true);
 
@@ -45,7 +45,7 @@ describe("OptimizationTab.vue", () => {
 
     api.ProductionAPI.optimize.mockResolvedValue({ data: mockData });
 
-    await wrapper.find("button.bg-green-600").trigger("click");
+    await wrapper.find("button.btn-optimize").trigger("click");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.vm.lastResult).toEqual(mockData);

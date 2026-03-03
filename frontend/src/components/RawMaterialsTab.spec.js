@@ -21,11 +21,11 @@ describe("RawMaterialsTab.vue", () => {
   });
 
   it("renders component with add button", () => {
-    expect(wrapper.find("button.bg-indigo-600").exists()).toBe(true);
+    expect(wrapper.find("button.btn-add-rawMaterial").exists()).toBe(true);
   });
 
   it("toggles form visibility", async () => {
-    const button = wrapper.find("button.bg-indigo-600");
+    const button = wrapper.find("button.btn-add-rawMaterial");
     expect(wrapper.vm.showForm).toBe(false);
 
     await button.trigger("click");
