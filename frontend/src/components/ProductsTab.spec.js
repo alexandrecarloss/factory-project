@@ -9,42 +9,23 @@ describe("ProductsTab.vue", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(ProductsTab, {
-      global: {
-        mocks: {
-          $t: (key) => key,
-        },
-      },
-    });
-
     api.ProductAPI.getAll.mockResolvedValue({
-      data: [
-        {
-          id: 1,
-          code: "BREAD",
-          name: "Bread",
-          price: 10.0,
-          description: "White bread",
-          composition: [],
-        },
-      ],
+      data: [{ id: 1, code: "BREAD", name: "Bread", price: 10.0, description: "White bread", composition: [] }],
     });
 
     api.RawMaterialAPI.getAll.mockResolvedValue({
-      data: [
-        {
-          id: 1,
-          code: "FLOUR",
-          name: "Flour",
-          stockQuantity: 1000,
-          unit: "g",
-        },
-      ],
+      data: [{ id: 1, code: "FLOUR", name: "Flour", stockQuantity: 1000, unit: "g" }],
+    });
+
+    wrapper = mount(ProductsTab, {
+      global: {
+        mocks: { $t: (key) => key },
+      },
     });
   });
 
   it("renders component with add button", () => {
-    expect(wrapper.find("button.btn-primary").exists()).toBe(true);
+    expect(wrapper.find("button.bg-indigo-600").exists()).toBe(true);
   });
 
   it("loads products on mount", async () => {
@@ -59,10 +40,7 @@ describe("ProductsTab.vue", () => {
   });
 
   it("removes composition field", async () => {
-    wrapper.vm.form.composition.push({
-      rawMaterialId: 1,
-      quantityRequired: 100,
-    });
+    wrapper.vm.form.composition.push({ rawMaterialId: 1, quantityRequired: 100 });
     const initialLength = wrapper.vm.form.composition.length;
     wrapper.vm.removeComposition(0);
     expect(wrapper.vm.form.composition.length).toBe(initialLength - 1);

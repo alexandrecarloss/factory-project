@@ -50,7 +50,7 @@
     "productCode": "Product Code",
     "productName": "Product Name",
     "unitPrice": "Unit Price",
-    "quantityToProce": "Quantity to Produce",
+    "quantityToProduce": "Quantity to Produce",
     "totalValue": "Total Value",
     "totalProduction": "Total Production Value",
     "noResults": "No production possible with current stock"

@@ -9,34 +9,23 @@ describe("RawMaterialsTab.vue", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(RawMaterialsTab, {
-      global: {
-        mocks: {
-          $t: (key) => key,
-        },
-      },
+    api.RawMaterialAPI.getAll.mockResolvedValue({
+      data: [{ id: 1, code: "FLOUR", name: "Flour", stockQuantity: 1000, unit: "g", description: "Wheat flour" }],
     });
 
-    api.RawMaterialAPI.getAll.mockResolvedValue({
-      data: [
-        {
-          id: 1,
-          code: "FLOUR",
-          name: "Flour",
-          stockQuantity: 1000,
-          unit: "g",
-          description: "Wheat flour",
-        },
-      ],
+    wrapper = mount(RawMaterialsTab, {
+      global: {
+        mocks: { $t: (key) => key },
+      },
     });
   });
 
   it("renders component with add button", () => {
-    expect(wrapper.find("button.btn-primary").exists()).toBe(true);
+    expect(wrapper.find("button.bg-indigo-600").exists()).toBe(true);
   });
 
   it("toggles form visibility", async () => {
-    const button = wrapper.find("button.btn-primary");
+    const button = wrapper.find("button.bg-indigo-600");
     expect(wrapper.vm.showForm).toBe(false);
 
     await button.trigger("click");

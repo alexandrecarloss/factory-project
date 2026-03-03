@@ -50,7 +50,7 @@
     "productCode": "Código do Produto",
     "productName": "Nome do Produto",
     "unitPrice": "Preço Unitário",
-    "quantityToProce": "Quantidade a Produzir",
+    "quantityToProduce": "Quantidade a Produzir",
     "totalValue": "Valor Total",
     "totalProduction": "Valor Total de Produção",
     "noResults": "Nenhuma produção possível com o estoque atual"

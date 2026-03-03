@@ -53,7 +53,7 @@
                 <th
                   class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider"
                 >
-                  {{ $t("optimization.quantityToProce") }}
+                  {{ $t("optimization.quantityToProduce") }}
                 </th>
                 <th
                   class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider"
