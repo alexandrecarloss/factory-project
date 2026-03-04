@@ -32,6 +32,7 @@ A comprehensive system for managing industrial production, optimizing the produc
 - **RESTful API**: Clean and well-documented API endpoints
 - **API Documentation**: Interactive API documentation with Swagger UI
 - **Responsive UI**: Tailwind CSS-based modern and utility-first interface
+- **Real-time Currency Conversion**: Dynamic price conversion (USD/BRL) using external Exchange Rate API integration.
 
 ## Demo
 
@@ -68,6 +69,7 @@ A comprehensive system for managing industrial production, optimizing the produc
 - **Tailwind CSS**
 - **Axios**
 - **Vue I18n** (Internationalization)
+- **AwesomeAPI** (Real-time Currency Exchange Data)
 - **Vitest** (Testing)
 
 ## 📋 Prerequisites
@@ -271,14 +273,22 @@ cd frontend
 npm run test:ui
 ```
 
-## 🌐 Internationalization
+## 🌐 Internationalization & Localization
 
-The application supports multiple languages:
+The application goes beyond simple text translation, offering a full localization experience:
 
-- **English (en)** - Default
-- **Portuguese (pt)**
+- **Multi-language Support**: Toggle between English (en) and Portuguese (pt).
+- **Smart Currency Handling**: 
+  - Automatically switches currency symbols ($ vs R$).
+  - **Live Exchange Rate**: Consumes the [AwesomeAPI](https://docs.awesomeapi.com.br/api-de-moedas) to fetch real-time USD/BRL rates.
+  - **Dynamic Calculation**: Prices are converted on-the-fly when switching languages, ensuring financial data consistency.
+- **Locale-aware Formatting**: Uses `Intl.NumberFormat` standards for currency and number separators.
 
-To change language, click the language toggle button on the top-right of the application.
+### 💱 Currency Integration Logic
+To avoid misinformation, the system doesn't just swap symbols. When the user selects **BRL**:
+1. The app fetches the current `bid` price from `USDBRL` endpoint.
+2. A helper function multiplies the base price (USD) by the retrieved rate.
+3. `Vue-i18n` formats the final result according to Brazilian standards.
 
 ## 🧮 Production Optimization Algorithm
 

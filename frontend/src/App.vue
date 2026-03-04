@@ -1,11 +1,15 @@
 <template>
   <div class="min-h-screen bg-gray-50 font-sans antialiased text-gray-900">
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+    <header
+      class="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm"
+    >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center gap-2">
             <span class="text-2xl">🏭</span>
-            <h1 class="text-xl font-bold tracking-tight text-indigo-600 uppercase">
+            <h1
+              class="text-xl font-bold tracking-tight text-indigo-600 uppercase"
+            >
               {{ $t("app.title") }}
             </h1>
           </div>
@@ -37,7 +41,9 @@
         </button>
       </nav>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 min-h-[500px]">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 min-h-[500px]"
+      >
         <transition
           mode="out-in"
           enter-active-class="transition duration-200 ease-out"
@@ -47,10 +53,11 @@
           leave-from-class="opacity-100 translate-y-0"
           leave-to-class="opacity-0 translate-y-2"
         >
-          <component 
-            :is="activeComponent" 
+          <component
+            :is="activeComponent"
             :key="activeTab"
-            @notify="triggerToast" 
+            :exchange-rate="exchangeRate"
+            @notify="triggerToast"
           />
         </transition>
       </div>
@@ -65,6 +72,7 @@ import RawMaterialsTab from "./components/RawMaterialsTab.vue";
 import ProductsTab from "./components/ProductsTab.vue";
 import OptimizationTab from "./components/OptimizationTab.vue";
 import ToastNotification from "./components/ToastNotification.vue";
+import { CurrencyService } from "./services/currency";
 
 export default {
   name: "App",
@@ -83,6 +91,7 @@ export default {
         { id: "prod", label: "menu.products" },
         { id: "optimization", label: "menu.optimization" },
       ],
+      exchangeRate: 1,
     };
   },
   computed: {
@@ -94,6 +103,9 @@ export default {
       };
       return map[this.activeTab];
     },
+  },
+  async mounted() {
+    this.exchangeRate = await CurrencyService.getUsdBrlRate();
   },
   methods: {
     toggleLanguage() {

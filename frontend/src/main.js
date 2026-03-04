@@ -5,6 +5,23 @@ import "./style.css";
 import en from "./locales/en.json";
 import pt from "./locales/pt.json";
 
+const numberFormats = {
+  'en': {
+    currency: {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'standard'
+    }
+  },
+  'pt': {
+    currency: {
+      style: 'currency',
+      currency: 'BRL',
+      notation: 'standard'
+    }
+  }
+}
+
 const i18n = createI18n({
   legacy: false,
   locale: "en",
@@ -13,6 +30,7 @@ const i18n = createI18n({
     en,
     pt,
   },
+  numberFormats,
 });
 
 const app = createApp(App);

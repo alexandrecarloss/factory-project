@@ -57,9 +57,9 @@
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-1">{{
-              $t("products.price")
-            }}</label>
+            <label class="block text-sm font-bold text-gray-700 mb-1">
+              {{ $t("products.price") }} ({{ formatValue(form.price) }})
+            </label>
             <input
               v-model.number="form.price"
               type="number"
@@ -112,17 +112,10 @@
                 class="w-full bg-transparent px-2 py-1 focus:outline-none text-sm"
                 required
               >
-                <option 
-                  :value="null" 
-                  disabled
-                >
+                <option :value="null" disabled>
                   {{ $t("products.rawMaterial") }}...
                 </option>
-                <option 
-                  v-for="m in rawMaterials" 
-                  :key="m.id" 
-                  :value="m.id"
-                >
+                <option v-for="m in rawMaterials" :key="m.id" :value="m.id">
                   {{ m.name }}
                 </option>
               </select>
@@ -157,13 +150,6 @@
             class="bg-green-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-green-700 transition-all shadow-md"
           >
             {{ $t("products.save") }}
-          </button>
-          <button
-            type="button"
-            class="text-gray-500 px-4 py-2 hover:bg-gray-100 rounded-lg transition-all"
-            @click="resetForm"
-          >
-            {{ $t("products.cancel") }}
           </button>
         </div>
       </form>
@@ -212,7 +198,7 @@
               </div>
             </td>
             <td class="px-6 py-4 text-sm font-mono text-gray-700 font-semibold">
-              ${{ product.price.toFixed(2) }}
+              {{ formatValue(product.price) }}
             </td>
             <td class="px-6 py-4">
               <div class="flex flex-wrap gap-1">
@@ -253,7 +239,8 @@ import ConfirmModal from "./ConfirmModal.vue";
 export default {
   name: "ProductsTab",
   components: { ConfirmModal },
-emits: ['notify'],
+  props: ['exchangeRate'],
+  emits: ["notify"],
   data() {
     return {
       products: [],
@@ -265,11 +252,28 @@ emits: ['notify'],
       itemToDelete: null,
     };
   },
+  computed: {
+    convertedTotal() {
+      const rate = 5.0;
+      return this.$i18n.locale === "pt"
+        ? this.lastResult.totalValue * rate
+        : this.lastResult.totalValue;
+    },
+  },
   mounted() {
     this.loadProducts();
     this.loadRawMaterials();
   },
   methods: {
+    formatValue(value) {
+      if (!value) value = 0;
+      
+      const converted = this.$i18n.locale === 'pt' 
+        ? value * (this.exchangeRate || 5.21)
+        : value;
+
+      return this.$n(converted, 'currency');
+    },
     async loadProducts() {
       try {
         const response = await ProductAPI.getAll();
@@ -290,13 +294,19 @@ emits: ['notify'],
       try {
         if (this.editingId) await ProductAPI.update(this.editingId, this.form);
         else await ProductAPI.create(this.form);
-        
+
         this.resetForm();
         this.loadProducts();
-        
-        this.$emit('notify', { message: this.$t("messages.product.successSaveProduct"), type: 'success' });
+
+        this.$emit("notify", {
+          message: this.$t("messages.product.successSaveProduct"),
+          type: "success",
+        });
       } catch (error) {
-        this.$emit('notify', { message: this.$t("messages.product.errorSaveProduct"), type: 'error' });
+        this.$emit("notify", {
+          message: this.$t("messages.product.errorSaveProduct"),
+          type: "error",
+        });
       }
     },
     confirmDelete(id) {
@@ -315,9 +325,15 @@ emits: ['notify'],
       try {
         await ProductAPI.delete(this.itemToDelete);
         this.loadProducts();
-        this.$emit('notify', { message: this.$t("messages.product.successDeleteProduct"), type: 'success' });
+        this.$emit("notify", {
+          message: this.$t("messages.product.successDeleteProduct"),
+          type: "success",
+        });
       } catch (e) {
-        this.$emit('notify', { message: this.$t("messages.product.errorDeleteProduct"), type: 'error' });
+        this.$emit("notify", {
+          message: this.$t("messages.product.errorDeleteProduct"),
+          type: "error",
+        });
       } finally {
         this.showConfirm = false;
         this.itemToDelete = null;

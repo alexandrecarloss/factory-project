@@ -21,20 +21,14 @@
       </button>
     </div>
 
-    <div 
-      v-if="lastResult" 
-      class="animate-fade-in space-y-6"
-    >
+    <div v-if="lastResult" class="animate-fade-in space-y-6">
       <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
         <p class="text-sm text-blue-700 font-medium">
           {{ lastResult.message }}
         </p>
       </div>
 
-      <div 
-        v-if="lastResult.suggestions.length > 0" 
-        class="space-y-4"
-      >
+      <div v-if="lastResult.suggestions.length > 0" class="space-y-4">
         <h3 class="text-lg font-semibold text-gray-700 px-1">
           {{ $t("optimization.suggestions") }}
         </h3>
@@ -84,7 +78,7 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-indigo-600"
                 >
-                  ${{ suggestion.totalValue.toFixed(2) }}
+                  {{ formatValue(lastResult.totalValue) }}
                 </td>
               </tr>
             </tbody>
@@ -98,7 +92,7 @@
             $t("optimization.totalProduction")
           }}</span>
           <span class="text-3xl font-black">
-            ${{ lastResult.totalValue.toFixed(2) }}
+            {{ formatValue(lastResult.totalValue) }}
           </span>
         </div>
       </div>
@@ -111,6 +105,7 @@ import { ProductionAPI } from "../services/api";
 
 export default {
   name: "OptimizationTab",
+  props: ['exchangeRate'],
   data() {
     return {
       loading: false,
@@ -129,6 +124,15 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    formatValue(value) {
+      if (!value) value = 0;
+      
+      const converted = this.$i18n.locale === 'pt' 
+        ? value * (this.exchangeRate || 5.21)
+        : value;
+
+      return this.$n(converted, 'currency');
     },
   },
 };
