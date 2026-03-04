@@ -23,7 +23,7 @@
 
     <div v-if="lastResult" class="animate-fade-in space-y-6">
       <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-        <p class="text-sm text-blue-700 font-medium">
+        <p class="lastResult-text text-sm text-blue-700 font-medium">
           {{ lastResult.message }}
         </p>
       </div>
