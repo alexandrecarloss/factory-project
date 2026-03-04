@@ -58,6 +58,27 @@
   "messages": {
     "success": "Operação concluída com sucesso",
     "error": "Erro ao executar operação",
-    "confirmDelete": "Tem certeza que deseja deletar este item?"
+    "save": {
+      "success": "Item salvo com sucesso",
+      "error": "Erro ocorreu ao salvar item"
+    },
+    "delete": {
+      "success": "Item excluído com sucesso",
+      "error": "Erro ocorreu ao excluir item"
+    },
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "product": {
+      "successSaveProduct": "Produto salvo com sucesso",
+      "errorSaveProduct": "Erro ocorreu ao salvar produto",
+      "successDeleteProduct": "Produto excluído com sucesso",
+      "errorDeleteProduct": "Erro ocorreu ao excluir produto"
+    },
+    "errorDeleteRawMaterial": "Erro ao excluir matéria-prima",
+    "successDeleteRawMaterial": "Matéria-prima excluída com sucesso",
+    "successSaveRawMaterial": "Matéria-prima salva com sucesso",
+    "errorSaveRawMaterial": "Erro ao salvar matéria-prima",
+    "confirmDelete": "Tem certeza que deseja deletar este item?",
+    "confirmDeleteTitle": "Confirmar Exclusão"
   }
 }

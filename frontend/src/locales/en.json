@@ -58,6 +58,27 @@
   "messages": {
     "success": "Operation completed successfully",
     "error": "Error occurred",
-    "confirmDelete": "Are you sure you want to delete this item?"
+    "save": {
+      "success": "Item saved successfully",
+      "error": "Error occurred while saving item"
+    },
+    "delete": {
+      "success": "Item deleted successfully",
+      "error": "Error occurred while deleting item"
+    },
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "product": {
+      "successSaveProduct": "Product saved successfully",
+      "errorSaveProduct": "Error occurred while saving product",
+      "successDeleteProduct": "Product deleted successfully",
+      "errorDeleteProduct": "Error occurred while deleting product"
+    },
+    "successDeleteRawMaterial": "Raw material deleted successfully",
+    "errorDeleteRawMaterial": "Error occurred while deleting raw material",
+    "successSaveRawMaterial": "Raw material saved successfully",
+    "errorSaveRawMaterial": "Error occurred while saving raw material",
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "confirmDeleteTitle": "Confirm Delete"
   }
 }

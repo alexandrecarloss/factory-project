@@ -3,6 +3,15 @@
     <div
       class="flex justify-between items-center border-b pb-4 border-gray-100"
     >
+      <div class="space-y-6">
+        <ConfirmModal
+          :show="showConfirm"
+          :title="$t('messages.confirmDeleteTitle')"
+          :message="$t('messages.confirmDelete')"
+          @cancel="showConfirm = false"
+          @confirm="handleDelete"
+        />
+      </div>
       <h2 class="text-2xl font-bold text-gray-800">
         {{ $t("products.title") }}
       </h2>
@@ -93,7 +102,9 @@
             class="flex gap-3 mb-3 items-center bg-gray-50 p-2 rounded-lg"
           >
             <div class="flex-1">
-              <label class="block text-[10px] uppercase font-bold text-gray-400 ml-1">
+              <label
+                class="block text-[10px] uppercase font-bold text-gray-400 ml-1"
+              >
                 {{ $t("products.rawMaterial") }}
               </label>
               <select
@@ -117,7 +128,9 @@
               </select>
             </div>
             <div class="w-32 border-l border-gray-200 pl-3">
-              <label class="block text-[10px] uppercase font-bold text-gray-400 ml-1">
+              <label
+                class="block text-[10px] uppercase font-bold text-gray-400 ml-1"
+              >
                 {{ $t("products.quantity") }}
               </label>
               <input
@@ -221,7 +234,7 @@
               </button>
               <button
                 class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors"
-                @click="deleteProduct(product.id)"
+                @click="confirmDelete(product.id)"
               >
                 🗑
               </button>
@@ -235,9 +248,12 @@
 
 <script>
 import { ProductAPI, RawMaterialAPI } from "../services/api";
+import ConfirmModal from "./ConfirmModal.vue";
 
 export default {
   name: "ProductsTab",
+  components: { ConfirmModal },
+emits: ['notify'],
   data() {
     return {
       products: [],
@@ -245,6 +261,8 @@ export default {
       showForm: false,
       form: { code: "", name: "", price: 0, description: "", composition: [] },
       editingId: null,
+      showConfirm: false,
+      itemToDelete: null,
     };
   },
   mounted() {
@@ -272,12 +290,18 @@ export default {
       try {
         if (this.editingId) await ProductAPI.update(this.editingId, this.form);
         else await ProductAPI.create(this.form);
+        
         this.resetForm();
         this.loadProducts();
-        alert(this.$t("messages.success"));
+        
+        this.$emit('notify', { message: this.$t("messages.product.successSaveProduct"), type: 'success' });
       } catch (error) {
-        alert(this.$t("messages.error"));
+        this.$emit('notify', { message: this.$t("messages.product.errorSaveProduct"), type: 'error' });
       }
+    },
+    confirmDelete(id) {
+      this.itemToDelete = id;
+      this.showConfirm = true;
     },
     editProduct(product) {
       this.form = {
@@ -287,14 +311,16 @@ export default {
       this.editingId = product.id;
       this.showForm = true;
     },
-    async deleteProduct(id) {
-      if (confirm(this.$t("messages.confirmDelete"))) {
-        try {
-          await ProductAPI.delete(id);
-          this.loadProducts();
-        } catch (error) {
-          alert(this.$t("messages.error"));
-        }
+    async handleDelete() {
+      try {
+        await ProductAPI.delete(this.itemToDelete);
+        this.loadProducts();
+        this.$emit('notify', { message: this.$t("messages.product.successDeleteProduct"), type: 'success' });
+      } catch (e) {
+        this.$emit('notify', { message: this.$t("messages.product.errorDeleteProduct"), type: 'error' });
+      } finally {
+        this.showConfirm = false;
+        this.itemToDelete = null;
       }
     },
     addComposition() {

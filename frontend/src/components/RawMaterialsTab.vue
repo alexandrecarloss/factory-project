@@ -3,6 +3,15 @@
     <div
       class="flex justify-between items-center border-b pb-4 border-gray-100"
     >
+      <div class="space-y-6">
+        <ConfirmModal 
+          :show="showConfirm"
+          :title="$t('messages.confirmDeleteTitle')"
+          :message="$t('messages.confirmDelete')"
+          @cancel="showConfirm = false"
+          @confirm="handleDelete"
+        />
+      </div>
       <h2 class="text-2xl font-bold text-gray-800">
         {{ $t("rawMaterials.title") }}
       </h2>
@@ -146,7 +155,7 @@
               </button>
               <button
                 class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors"
-                @click="deleteMaterial(material.id)"
+                @click="confirmDelete(material.id)"
               >
                 🗑
               </button>
@@ -160,15 +169,20 @@
 
 <script>
 import { RawMaterialAPI } from "../services/api";
+import ConfirmModal from "./ConfirmModal.vue";
 
 export default {
   name: "RawMaterialsTab",
+  components: { ConfirmModal },
+emits: ['notify'],
   data() {
     return {
       materials: [],
       showForm: false,
       form: { code: "", name: "", stockQuantity: 0, unit: "", description: "" },
       editingId: null,
+      showConfirm: false,
+      itemToDelete: null,
     };
   },
   mounted() {
@@ -185,29 +199,36 @@ export default {
     },
     async saveRawMaterial() {
       try {
-        if (this.editingId)
-          await RawMaterialAPI.update(this.editingId, this.form);
+        if (this.editingId) await RawMaterialAPI.update(this.editingId, this.form);
         else await RawMaterialAPI.create(this.form);
+        
         this.resetForm();
         this.loadMaterials();
-        alert(this.$t("messages.success"));
+        
+        this.$emit('notify', { message: this.$t("messages.successSaveRawMaterial"), type: 'success' });
       } catch (error) {
-        alert(this.$t("messages.error"));
+        this.$emit('notify', { message: this.$t("messages.errorSaveRawMaterial"), type: 'error' });
       }
+    },
+    confirmDelete(id) {
+      this.itemToDelete = id;
+      this.showConfirm = true;
     },
     editMaterial(material) {
       this.form = { ...material };
       this.editingId = material.id;
       this.showForm = true;
     },
-    async deleteMaterial(id) {
-      if (confirm(this.$t("messages.confirmDelete"))) {
-        try {
-          await RawMaterialAPI.delete(id);
-          this.loadMaterials();
-        } catch (error) {
-          alert(this.$t("messages.error"));
-        }
+    async handleDelete() {
+      try {
+        await RawMaterialAPI.delete(this.itemToDelete);
+        this.loadMaterials();
+        this.$emit('notify', { message: this.$t("messages.successDeleteRawMaterial"), type: 'success' });
+      } catch (e) {
+        this.$emit('notify', { message: this.$t("messages.errorDeleteRawMaterial"), type: 'error' });
+      } finally {
+        this.showConfirm = false;
+        this.itemToDelete = null;
       }
     },
     resetForm() {

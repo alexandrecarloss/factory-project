@@ -9,10 +9,10 @@
               {{ $t("app.title") }}
             </h1>
           </div>
-          
+
           <button
-            @click="toggleLanguage"
             class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-all"
+            @click="toggleLanguage"
           >
             {{ $i18n.locale === "en" ? "🇧🇷 PT" : "🇺🇸 EN" }}
           </button>
@@ -25,28 +25,38 @@
         <button
           v-for="tab in tabs"
           :key="tab.id"
-          @click="activeTab = tab.id"
           :class="[
-            activeTab === tab.id 
-              ? 'bg-white text-indigo-600 shadow-sm' 
+            activeTab === tab.id
+              ? 'bg-white text-indigo-600 shadow-sm'
               : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100',
-            'px-4 py-2 text-sm font-semibold rounded-lg transition-all'
+            'px-4 py-2 text-sm font-semibold rounded-lg transition-all',
           ]"
+          @click="activeTab = tab.id"
         >
           {{ $t(tab.label) }}
         </button>
       </nav>
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 min-h-[500px]">
-        <transition mode="out-in" enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 translate-y-2" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-2">
-          <div :key="activeTab">
-            <RawMaterialsTab v-if="activeTab === 'raw'" />
-            <ProductsTab v-if="activeTab === 'prod'" />
-            <OptimizationTab v-if="activeTab === 'optimization'" />
-          </div>
+        <transition
+          mode="out-in"
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="opacity-0 translate-y-2"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-2"
+        >
+          <component 
+            :is="activeComponent" 
+            :key="activeTab"
+            @notify="triggerToast" 
+          />
         </transition>
       </div>
     </main>
+
+    <ToastNotification ref="toast" />
   </div>
 </template>
 
@@ -54,23 +64,43 @@
 import RawMaterialsTab from "./components/RawMaterialsTab.vue";
 import ProductsTab from "./components/ProductsTab.vue";
 import OptimizationTab from "./components/OptimizationTab.vue";
+import ToastNotification from "./components/ToastNotification.vue";
 
 export default {
   name: "App",
-  components: { RawMaterialsTab, ProductsTab, OptimizationTab },
+  components: {
+    RawMaterialsTab,
+    ProductsTab,
+    OptimizationTab,
+    ToastNotification,
+  },
+
   data() {
     return {
       activeTab: "raw",
       tabs: [
-        { id: 'raw', label: 'menu.rawMaterials' },
-        { id: 'prod', label: 'menu.products' },
-        { id: 'optimization', label: 'menu.optimization' }
-      ]
+        { id: "raw", label: "menu.rawMaterials" },
+        { id: "prod", label: "menu.products" },
+        { id: "optimization", label: "menu.optimization" },
+      ],
     };
+  },
+  computed: {
+    activeComponent() {
+      const map = {
+        raw: "RawMaterialsTab",
+        prod: "ProductsTab",
+        optimization: "OptimizationTab",
+      };
+      return map[this.activeTab];
+    },
   },
   methods: {
     toggleLanguage() {
       this.$i18n.locale = this.$i18n.locale === "en" ? "pt" : "en";
+    },
+    triggerToast({ message, type }) {
+      this.$refs.toast.add(message, type);
     },
   },
 };
